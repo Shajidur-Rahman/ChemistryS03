@@ -1,0 +1,6 @@
+{
+  "name": "Quantitative Chemistry Lab Assistant",
+  "description": "Interactive Quantitative Chemistry lab assistant with 184 Bengali chemistry problems, structured progression, formula hints, and random/sequential practice modes.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
