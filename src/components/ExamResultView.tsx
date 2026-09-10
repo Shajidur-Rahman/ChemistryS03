@@ -18,6 +18,7 @@ import {
 import confetti from 'canvas-confetti';
 import { ExamResult } from '../data/types';
 import { englishToBengaliDigits } from '../data/questions';
+import { formatChemicalFormula } from '../utils/chemistryFormatter';
 
 interface ExamResultViewProps {
   result: ExamResult;
@@ -273,7 +274,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
 
                 {/* Bengali Question Text */}
                 <h4 className="text-sm sm:text-base font-medium text-slate-900 leading-relaxed">
-                  {item.question.question}
+                  {formatChemicalFormula(item.question.question)}
                 </h4>
 
                 {/* Answers Comparison */}
@@ -297,7 +298,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                   <div className="p-3 rounded-2xl bg-teal-50/50 border border-teal-200 text-xs sm:text-sm text-teal-950">
                     <span className="text-xs font-semibold block text-teal-700 mb-0.5">সঠিক উত্তর:</span>
                     <span className="font-bold text-teal-900">
-                      {item.question.answer}
+                      {formatChemicalFormula(item.question.answer)}
                     </span>
                   </div>
 
@@ -310,7 +311,7 @@ export const ExamResultView: React.FC<ExamResultViewProps> = ({
                     <span>পূর্ণাঙ্গ সমাধান ও রাসায়নিক গণনা:</span>
                   </div>
                   <p className="leading-relaxed font-mono whitespace-pre-wrap">
-                    {item.question.stepExplanation || item.question.formulaHint}
+                    {formatChemicalFormula(item.question.stepExplanation || item.question.formulaHint)}
                   </p>
                 </div>
 

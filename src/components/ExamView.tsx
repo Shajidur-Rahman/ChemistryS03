@@ -17,6 +17,7 @@ import { Question, ExamResult, ExamResultBreakdown } from '../data/types';
 import { checkStudentAnswer, englishToBengaliDigits } from '../data/questions';
 import { classifyQuestionAnswer } from '../utils/answerClassifier';
 import { SmartAnswerKeyboard } from './SmartAnswerKeyboard';
+import { formatChemicalFormula } from '../utils/chemistryFormatter';
 
 interface ExamViewProps {
   questions: Question[];
@@ -118,38 +119,43 @@ export const ExamView: React.FC<ExamViewProps> = ({
 
   // Final evaluation logic
   const handleCompleteExam = () => {
-    const breakdowns: ExamResultBreakdown[] = questions.map((q) => {
-      const studentAns = (userAnswers[q.id] || '').trim();
-      const isSkipped = studentAns.length === 0;
-      const isCorrect = !isSkipped && checkStudentAnswer(q, studentAns);
-      return {
-        question: q,
-        userAnswer: studentAns,
-        isCorrect,
-        isSkipped,
-        timeSpentSeconds: timeSpent[q.id] || 0,
+    try {
+      const breakdowns: ExamResultBreakdown[] = questions.map((q) => {
+        const studentAns = (userAnswers[q.id] || '').trim();
+        const isSkipped = studentAns.length === 0;
+        const isCorrect = !isSkipped && !!checkStudentAnswer(studentAns, q)?.isCorrect;
+        return {
+          question: q,
+          userAnswer: studentAns,
+          isCorrect,
+          isSkipped,
+          timeSpentSeconds: timeSpent[q.id] || 0,
+        };
+      });
+
+      const correctCount = breakdowns.filter((b) => b.isCorrect).length;
+      const wrongCount = breakdowns.filter((b) => !b.isCorrect && !b.isSkipped).length;
+      const skippedCount = breakdowns.filter((b) => b.isSkipped).length;
+      const scorePercentage = Math.round((correctCount / questions.length) * 100);
+
+      const result: ExamResult = {
+        id: `exam-${Date.now()}`,
+        totalQuestions: questions.length,
+        answeredCount,
+        correctCount,
+        wrongCount,
+        skippedCount,
+        scorePercentage,
+        totalTimeSeconds: totalSeconds,
+        items: breakdowns,
+        completedAt: Date.now(),
       };
-    });
 
-    const correctCount = breakdowns.filter((b) => b.isCorrect).length;
-    const wrongCount = breakdowns.filter((b) => !b.isCorrect && !b.isSkipped).length;
-    const skippedCount = breakdowns.filter((b) => b.isSkipped).length;
-    const scorePercentage = Math.round((correctCount / questions.length) * 100);
-
-    const result: ExamResult = {
-      id: `exam-${Date.now()}`,
-      totalQuestions: questions.length,
-      answeredCount,
-      correctCount,
-      wrongCount,
-      skippedCount,
-      scorePercentage,
-      totalTimeSeconds: totalSeconds,
-      items: breakdowns,
-      completedAt: Date.now(),
-    };
-
-    onFinishExam(result);
+      setShowConfirmFinish(false);
+      onFinishExam(result);
+    } catch (err) {
+      console.error("Error completing exam:", err);
+    }
   };
 
   if (!currentQuestion || !answerClassification) return null;
@@ -318,7 +324,7 @@ export const ExamView: React.FC<ExamViewProps> = ({
           {/* Bengali Question Text */}
           <div className="space-y-3">
             <h2 className="text-base sm:text-xl font-medium text-slate-900 leading-relaxed">
-              {currentQuestion.question}
+              {formatChemicalFormula(currentQuestion.question)}
             </h2>
           </div>
 

@@ -22,6 +22,7 @@ import { AnalogClockTimer } from './AnalogClockTimer';
 import { estimateQuestionTime } from '../utils/timeEstimator';
 import { classifyQuestionAnswer } from '../utils/answerClassifier';
 import { SmartAnswerKeyboard } from './SmartAnswerKeyboard';
+import { formatChemicalFormula } from '../utils/chemistryFormatter';
 
 interface QuestionCardProps {
   question: Question;
@@ -207,7 +208,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
           {/* Bengali Question Text */}
           <div className="space-y-3">
             <h2 className="text-base sm:text-xl font-medium text-slate-900 leading-relaxed tracking-normal">
-              {question.question}
+              {formatChemicalFormula(question.question)}
             </h2>
           </div>
 
@@ -223,7 +224,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                     অভিনন্দন! তোমার উত্তরটি একদম সঠিক হয়েছে! 🎉
                   </h3>
                   <p className="text-sm text-emerald-800">
-                    সঠিক উত্তর: <strong className="font-semibold text-emerald-950">{question.answer}</strong>
+                    সঠিক উত্তর: <strong className="font-semibold text-emerald-950">{formatChemicalFormula(question.answer)}</strong>
                   </p>
                 </div>
               </div>
@@ -231,7 +232,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
               {/* Explanation / Verification */}
               <div className="pt-2 border-t border-emerald-200 text-xs sm:text-sm text-emerald-800/90 leading-relaxed bg-white/60 p-3 rounded-xl">
                 <strong className="text-emerald-950 block mb-1">ব্যাখ্যা ও রাসায়নিক গণনা:</strong>
-                <p>{question.stepExplanation}</p>
+                <p>{formatChemicalFormula(question.stepExplanation)}</p>
               </div>
 
               <div className="pt-1 flex flex-wrap items-center justify-between gap-2">
@@ -275,7 +276,7 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                     <span>প্রয়োজনীয় সূত্র ও সমাধান সূত্র (Formula Hint):</span>
                   </div>
                   <div className="p-3 bg-amber-50/50 rounded-lg font-mono text-xs sm:text-sm text-slate-800 border border-amber-100 whitespace-pre-wrap leading-relaxed">
-                    {question.formulaHint}
+                    {formatChemicalFormula(question.formulaHint)}
                   </div>
                 </div>
               )}
@@ -303,8 +304,8 @@ export const QuestionCard: React.FC<QuestionCardProps> = ({
                     <Sparkles className="w-4 h-4 text-indigo-600" />
                     <span>পূর্ণাঙ্গ সমাধান ও সঠিক উত্তর:</span>
                   </div>
-                  <p className="font-bold text-teal-800 text-base">উত্তর: {question.answer}</p>
-                  <p className="text-slate-700 leading-relaxed">{question.stepExplanation}</p>
+                  <p className="font-bold text-teal-800 text-base">উত্তর: {formatChemicalFormula(question.answer)}</p>
+                  <p className="text-slate-700 leading-relaxed">{formatChemicalFormula(question.stepExplanation)}</p>
                 </div>
               )}
             </div>

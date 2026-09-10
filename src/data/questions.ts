@@ -35,13 +35,18 @@ export const topicList = [
 
 export const difficultyList = ["সকল স্তর", "মৌলিক", "মধ্যম", "অগ্রবর্তী"] as const;
 
-// Helper to convert Bengali numbers to English numbers
+// Helper to convert Bengali numbers and sub/superscripts to standard English digits
 export function bengaliToEnglishDigits(str: string): string {
+  if (typeof str !== 'string') return '';
   const bnToEnMap: Record<string, string> = {
     '০': '0', '১': '1', '২': '2', '৩': '3', '৪': '4',
-    '৫': '5', '৬': '6', '৭': '7', '৮': '8', '৯': '9'
+    '৫': '5', '৬': '6', '৭': '7', '৮': '8', '৯': '9',
+    '₀': '0', '₁': '1', '₂': '2', '₃': '3', '₄': '4',
+    '₅': '5', '₆': '6', '₇': '7', '₈': '8', '₉': '9',
+    '⁰': '0', '¹': '1', '²': '2', '³': '3', '⁴': '4',
+    '⁵': '5', '⁶': '6', '⁷': '7', '⁸': '8', '⁹': '9'
   };
-  return str.replace(/[০-৯]/g, (char) => bnToEnMap[char] || char);
+  return str.replace(/[০-৯₀-₉⁰-⁹]/g, (char) => bnToEnMap[char] || char);
 }
 
 // Helper to convert English numbers to Bengali numerals
